@@ -11,7 +11,7 @@ class SocketService {
     // Use environment variable if set, otherwise auto-detect
     const serverUrl = import.meta.env.VITE_SERVER_URL ||
       (window.location.hostname === 'localhost' 
-        ? 'http://localhost:3000'
+        ? 'http://localhost:3005'
         : window.location.origin);
 
     this.socket = io(serverUrl, {
