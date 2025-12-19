@@ -1,4 +1,5 @@
 import { io } from 'socket.io-client';
+import { SOCKET_URL } from '../config';
 
 class SocketService {
   constructor() {
@@ -7,7 +8,7 @@ class SocketService {
     this.listeners = new Map();
   }
 
-  connect(token, serverUrl = 'http://10.0.2.2:3000') {
+  connect(token, serverUrl = SOCKET_URL) {
     this.socket = io(serverUrl, {
       transports: ['websocket', 'polling'],
       reconnection: true,

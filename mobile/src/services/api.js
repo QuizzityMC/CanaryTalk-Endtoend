@@ -1,5 +1,4 @@
-// Default server URL - change this to your server's IP/domain
-const API_URL = 'http://10.0.2.2:3000/api'; // Android emulator localhost
+import { API_URL } from '../config';
 
 export async function register(username, password, publicKey) {
   const response = await fetch(`${API_URL}/register`, {

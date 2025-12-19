@@ -1,6 +1,9 @@
-const API_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:3000/api'
-  : '/api';
+// API Configuration
+// In production, set VITE_API_URL environment variable
+const API_URL = import.meta.env.VITE_API_URL || 
+  (window.location.hostname === 'localhost' 
+    ? 'http://localhost:3000/api'
+    : '/api');
 
 export async function register(username, password, publicKey) {
   const response = await fetch(`${API_URL}/register`, {

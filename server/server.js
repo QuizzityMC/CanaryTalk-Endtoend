@@ -11,15 +11,35 @@ require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
+
+// CORS configuration - restrict in production
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:5173', 'http://localhost:3000'];
+
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: process.env.NODE_ENV === 'production' 
+      ? allowedOrigins 
+      : "*",
     methods: ["GET", "POST"]
   }
 });
 
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'canarytalk-secret-key-change-in-production';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// Security check: Ensure JWT_SECRET is set in production
+if (!JWT_SECRET) {
+  if (process.env.NODE_ENV === 'production') {
+    console.error('FATAL: JWT_SECRET environment variable is not set!');
+    console.error('Set JWT_SECRET in your .env file or environment variables.');
+    process.exit(1);
+  }
+  // Use a warning default only in development
+  console.warn('WARNING: Using default JWT_SECRET. DO NOT use in production!');
+  JWT_SECRET = 'dev-secret-change-in-production';
+}
 
 // Initialize database
 const db = new Database('canarytalk.db');
@@ -51,7 +71,12 @@ db.exec(`
 `);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? allowedOrigins 
+    : "*",
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve web app static files
