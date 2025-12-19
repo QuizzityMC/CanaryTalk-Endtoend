@@ -351,7 +351,7 @@ app.get('/health', (req, res) => {
 });
 
 // Serve web app for all other routes (SPA support)
-app.get('*', (req, res) => {
+app.get('*', apiLimiter, (req, res) => {
   res.sendFile(path.join(webAppPath, 'index.html'));
 });
 
