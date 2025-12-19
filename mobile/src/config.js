@@ -11,8 +11,8 @@ const getDefaultServerUrl = () => {
   if (__DEV__) {
     // Development mode
     return Platform.OS === 'android' 
-      ? 'http://10.0.2.2:3000'  // Android emulator
-      : 'http://localhost:3000'; // iOS simulator
+      ? 'http://10.0.2.2:3005'  // Android emulator
+      : 'http://localhost:3005'; // iOS simulator
   }
   // Production - update this with your server URL
   return 'https://your-server-domain.com';

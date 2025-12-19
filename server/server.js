@@ -16,7 +16,7 @@ const server = http.createServer(app);
 // CORS configuration - restrict in production
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
   ? process.env.ALLOWED_ORIGINS.split(',')
-  : ['http://localhost:5173', 'http://localhost:3000'];
+  : ['http://localhost:5173', 'http://localhost:3005'];
 
 const io = socketIo(server, {
   cors: {
@@ -27,7 +27,7 @@ const io = socketIo(server, {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Security check: Ensure JWT_SECRET is set in production

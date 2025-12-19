@@ -2,7 +2,7 @@
 // In production, set VITE_API_URL environment variable
 const API_URL = import.meta.env.VITE_API_URL || 
   (window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api'
+    ? 'http://localhost:3005/api'
     : '/api');
 
 export async function register(username, password, publicKey) {
