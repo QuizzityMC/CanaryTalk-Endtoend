@@ -1,0 +1,51 @@
+{
+  "name": "canarytalk-desktop",
+  "version": "1.0.0",
+  "description": "CanaryTalk Desktop - E2E Encrypted Chat",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "npm run build:web && electron-builder",
+    "build:web": "cd ../webapp && npm run build",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.canarytalk.desktop",
+    "productName": "CanaryTalk",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*"
+    ],
+    "win": {
+      "target": ["nsis", "portable"],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.social-networking"
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "rpm"],
+      "icon": "assets/icon.png",
+      "category": "Network"
+    }
+  },
+  "keywords": ["chat", "e2e-encryption", "messaging"],
+  "author": "CanaryTalk Team",
+  "license": "MIT",
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  }
+}

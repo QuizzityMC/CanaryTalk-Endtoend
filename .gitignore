@@ -1,0 +1,21 @@
+# Root .gitignore
+node_modules/
+.DS_Store
+*.log
+.env
+
+# Build outputs
+dist/
+build/
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
