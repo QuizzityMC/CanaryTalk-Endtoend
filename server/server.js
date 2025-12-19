@@ -7,6 +7,7 @@ const Database = require('better-sqlite3');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 const path = require('path');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
@@ -79,6 +80,23 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Rate limiting
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // Limit each IP to 5 requests per windowMs for auth endpoints
+  message: 'Too many authentication attempts, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100, // Limit each IP to 100 requests per minute
+  message: 'Too many requests, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Serve web app static files
 const webAppPath = path.join(__dirname, '../webapp/dist');
 app.use(express.static(webAppPath));
@@ -96,7 +114,7 @@ function verifyToken(token) {
 }
 
 // REST API endpoints
-app.post('/api/register', async (req, res) => {
+app.post('/api/register', authLimiter, async (req, res) => {
   const { username, password, publicKey } = req.body;
 
   if (!username || !password) {
@@ -127,7 +145,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/api/login', authLimiter, async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -160,7 +178,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-app.post('/api/users/public-key', (req, res) => {
+app.post('/api/users/public-key', apiLimiter, (req, res) => {
   const { userId, publicKey } = req.body;
   const authHeader = req.headers.authorization;
 
@@ -184,7 +202,7 @@ app.post('/api/users/public-key', (req, res) => {
   }
 });
 
-app.get('/api/users/:username/public-key', (req, res) => {
+app.get('/api/users/:username/public-key', apiLimiter, (req, res) => {
   const { username } = req.params;
 
   try {
@@ -205,7 +223,7 @@ app.get('/api/users/:username/public-key', (req, res) => {
   }
 });
 
-app.get('/api/users/search/:query', (req, res) => {
+app.get('/api/users/search/:query', apiLimiter, (req, res) => {
   const { query } = req.params;
 
   try {
