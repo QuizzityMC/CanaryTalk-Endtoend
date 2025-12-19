@@ -28,7 +28,7 @@ const io = socketIo(server, {
 });
 
 const PORT = process.env.PORT || 3005;
-const JWT_SECRET = process.env.JWT_SECRET;
+let JWT_SECRET = process.env.JWT_SECRET;
 
 // Security check: Ensure JWT_SECRET is set in production
 if (!JWT_SECRET) {
